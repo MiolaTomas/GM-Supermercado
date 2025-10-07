@@ -16,4 +16,8 @@ body {
 
   --sidebar-bg: #f7f7f7;
   --sidebar-base-text: #858a89;
+
+  --color-button-green: #42b542;
+  --color-button-orange: #ff914d;
+  --color-button-red: #b54242;
 }
