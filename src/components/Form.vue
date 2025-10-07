@@ -1,0 +1,3 @@
+<template>
+    asdfasfd
+</template>
