@@ -33,38 +33,41 @@
                     <!-- Nombre del Producto -->
                     <div class="form-group">
                         <label>Nombre del Producto <span class="required">*</span></label>
-                        <input type="text" placeholder="Ingrese nombre de producto" v-model="form.nombreProducto" />
+                        <input type="text" placeholder="Ingrese nombre de producto" v-model="form.nombreProducto"
+                            :disabled="!formEnabled" />
                     </div>
 
                     <!-- Precio Unitario -->
                     <div class="form-group">
                         <label>Precio Unitario <span class="required">*</span></label>
-                        <input type="text" placeholder="Ingrese el precio de producto" v-model="form.precioUnitario" />
+                        <input type="text" placeholder="Ingrese el precio de producto" v-model="form.precioUnitario"
+                            :disabled="!formEnabled" />
                     </div>
 
                     <!-- Punto crítico de reposición -->
                     <div class="form-group">
                         <label>Punto crítico de reposición <span class="required">*</span></label>
-                        <input type="text" placeholder="Ingrese el número de pun..." v-model="form.puntoCritico" />
+                        <input type="text" placeholder="Ingrese el número de pun..." v-model="form.puntoCritico"
+                            :disabled="!formEnabled" />
                     </div>
 
                     <!-- Existencias -->
                     <div class="form-group">
                         <label>Existencias</label>
-                        <input type="text" placeholder="Ingrese la cantidad de existencias"
-                            v-model="form.existencias" />
+                        <input type="text" placeholder="Ingrese la cantidad de existencias" v-model="form.existencias"
+                            :disabled="!formEnabled" />
                     </div>
 
                     <!-- Producto Generico -->
                     <div class="form-group">
                         <label>Producto Generico <span class="required">*</span></label>
                         <div class="input-with-button">
-                            <select v-model="form.productoGenerico">
-                                <option value="">Yerba</option>
-                                <option value="cafe">Café</option>
-                                <option value="te">Té</option>
+                            <select v-model="form.productoGenerico" :disabled="!formEnabled">
+                                <option value="">Seleccione un genérico</option>
+                                <option v-for="(g, idx) in productoGenericos" :key="idx" :value="g">{{ g }}</option>
                             </select>
-                            <button class="btn-add-field" @click="openModal">
+                            <!-- NOTA: el botón para abrir el modal está AVAILABLE siempre -->
+                            <button class="btn-add-field" @click="openModal" type="button">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
@@ -75,15 +78,18 @@
                         <label>Rotación <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-label">
-                                <input type="radio" name="rotacion" value="A" v-model="form.rotacion" />
+                                <input type="radio" name="rotacion" value="A" v-model="form.rotacion"
+                                    :disabled="!formEnabled" />
                                 <span>A</span>
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="rotacion" value="B" v-model="form.rotacion" />
+                                <input type="radio" name="rotacion" value="B" v-model="form.rotacion"
+                                    :disabled="!formEnabled" />
                                 <span>B</span>
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="rotacion" value="C" v-model="form.rotacion" />
+                                <input type="radio" name="rotacion" value="C" v-model="form.rotacion"
+                                    :disabled="!formEnabled" />
                                 <span>C</span>
                             </label>
                         </div>
@@ -95,7 +101,7 @@
                     <!-- ID -->
                     <div class="form-group">
                         <label>ID</label>
-                        <input type="text" value="199999" disabled class="disabled-input" />
+                        <input type="text" :value="form.id || editingId || '—'" disabled class="disabled-input" />
                     </div>
 
                     <!-- Código de Barra -->
@@ -107,7 +113,7 @@
                     <!-- Imagen -->
                     <div class="form-group">
                         <label>Imagen</label>
-                        <div class="image-upload">
+                        <div class="image-upload" :class="{ disabled: !formEnabled }">
                             <i class="fa-solid fa-image"></i>
                             <span>Subir una imagen</span>
                         </div>
@@ -117,29 +123,29 @@
                     <div class="form-group">
                         <label>Marca <span class="required">*</span></label>
                         <div class="input-with-button">
-                            <select v-model="form.marca">
-                                <option value="">Playadito</option>
-                                <option value="taragui">Taragüí</option>
-                                <option value="rosamonte">Rosamonte</option>
+                            <select v-model="form.marca" :disabled="!formEnabled">
+                                <option value="">Seleccione una marca</option>
+                                <option v-for="(m, idx) in marcas" :key="idx" :value="m">{{ m }}</option>
                             </select>
-                            <button class="btn-add-field" @click="openMarcaModal">
+                            <!-- permitimos abrir modal de marca siempre -->
+                            <button class="btn-add-field" @click="openMarcaModal" type="button">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Presentación -->
+                    <!-- Presentación (DROPDOWN + BUTTON) -->
                     <div class="form-group">
                         <label>Presentación <span class="required">*</span></label>
-                        <div class="presentation-input">
-                            <input type="number" placeholder="Cantidad" v-model="form.cantidad"
-                                class="quantity-input" />
-                            <select v-model="form.unidadMedida" class="unit-select">
-                                <option value="kg">Kg</option>
-                                <option value="g">G</option>
-                                <option value="l">L</option>
-                                <option value="ml">Ml</option>
+                        <div class="input-with-button">
+                            <select v-model="form.presentacion" :disabled="!formEnabled">
+                                <option value="">Seleccione una presentación</option>
+                                <option v-for="(p, idx) in presentaciones" :key="idx" :value="p">{{ p }}</option>
                             </select>
+                            <!-- permitimos abrir modal de presentación siempre -->
+                            <button class="btn-add-field" @click="openPresentacionModal" type="button">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -147,12 +153,12 @@
                     <div class="form-group">
                         <label>Proveedor <span class="required">*</span></label>
                         <div class="input-with-button">
-                            <select v-model="form.proveedor">
-                                <option value="">Presentación</option>
-                                <option value="proveedor1">Proveedor 1</option>
-                                <option value="proveedor2">Proveedor 2</option>
+                            <select v-model="form.proveedor" :disabled="!formEnabled">
+                                <option value="">Seleccione un proveedor</option>
+                                <option v-for="(p, idx) in proveedores" :key="idx" :value="p">{{ p }}</option>
                             </select>
-                            <button class="btn-add-field">
+                            <!-- permitimos abrir modal de proveedor siempre -->
+                            <button class="btn-add-field" @click="openProveedorModal" type="button">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
@@ -162,15 +168,16 @@
 
             <!-- Botones del formulario -->
             <div class="form-actions">
-                <button class="btn-cancel">Cancelar</button>
-                <button class="btn-submit">Cargar</button>
+                <button class="btn-cancel" type="button" @click="cancelForm">Cancelar</button>
+                <button class="btn-submit" type="button" @click="submitForm" :disabled="!formEnabled">
+                    Cargar
+                </button>
             </div>
         </div>
 
         <!-- Modal Producto Genérico -->
         <div v-if="showModal" class="modal-overlay" @click="closeModal">
             <div class="modal-content" @click.stop>
-                <!-- Header del modal -->
                 <div class="modal-header">
                     <div class="breadcrumb">
                         <span>Inicio</span>
@@ -184,51 +191,28 @@
                     </button>
                 </div>
 
-                <!-- Título -->
                 <h2 class="modal-title">Genérico</h2>
 
-                <!-- Botones CRUD del modal -->
-                <!-- <div class="modal-crud-buttons">
-                    <button class="btn-add btn-new">
-                        <i class="fa-solid fa-plus"></i>
-                        <span>Nuevo</span>
-                    </button>
-                    <button class="btn-add btn-edit">
-                        <i class="fa-solid fa-pen"></i>
-                        <span>Modificar</span>
-                    </button>
-                    <button class="btn-add btn-delete">
-                        <i class="fa-solid fa-trash"></i>
-                        <span>Eliminar</span>
-                    </button>
-                </div> -->
-
-                <!-- Formulario del modal -->
                 <div class="modal-form">
                     <div class="modal-form-row">
-                        <!-- Descripción -->
                         <div class="form-group">
-                            <label>Descripción <span class="required">*</span></label>
-                            <input type="text" placeholder="Ingrese Descripción" v-model="modalForm.descripcion" />
+                            <label>Nombre <span class="required">*</span></label>
+                            <input type="text" placeholder="Ingrese Nombre" v-model="modalForm.nombre" />
                         </div>
-
-                        <!-- ID Producto Genérico -->
                         <div class="form-group">
                             <label>ID Producto Genérico <span class="required">*</span></label>
                             <input type="text" value="999999" disabled class="disabled-input" />
                         </div>
                     </div>
 
-                    <div class="modal-form-row">
-                        <!-- Nombre -->
+                    <!-- <div class="modal-form-row">
                         <div class="form-group">
                             <label>Nombre <span class="required">*</span></label>
                             <input type="text" placeholder="Ingrese Nombre" v-model="modalForm.nombre" />
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="modal-form-row">
-                        <!-- Categoría -->
                         <div class="form-group">
                             <label>Categoría <span class="required">*</span></label>
                             <div class="input-with-button">
@@ -237,15 +221,11 @@
                                     <option value="alimentos">Alimentos</option>
                                     <option value="bebidas">Bebidas</option>
                                 </select>
-                                <button class="btn-add-field">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Botones de acción del modal -->
                 <div class="modal-actions">
                     <button class="btn-cancel" @click="closeModal">Cancelar</button>
                     <button class="btn-submit" @click="saveModal">Cargar</button>
@@ -256,7 +236,6 @@
         <!-- Modal Marca -->
         <div v-if="showMarcaModal" class="modal-overlay" @click="closeMarcaModal">
             <div class="modal-content modal-small" @click.stop>
-                <!-- Header del modal -->
                 <div class="modal-header">
                     <div class="breadcrumb">
                         <span>Inicio</span>
@@ -270,67 +249,122 @@
                     </button>
                 </div>
 
-                <!-- Título -->
                 <h2 class="modal-title">Marca</h2>
 
-                <!-- Botones CRUD del modal -->
-                <div class="modal-crud-buttons">
-                    <button class="btn-add btn-new">
-                        <i class="fa-solid fa-plus"></i>
-                        <span>Nuevo</span>
-                    </button>
-                    <button class="btn-add btn-edit">
-                        <i class="fa-solid fa-pen"></i>
-                        <span>Modificar</span>
-                    </button>
-                    <button class="btn-add btn-delete">
-                        <i class="fa-solid fa-trash"></i>
-                        <span>Eliminar</span>
-                    </button>
-                </div>
-
-                <!-- Formulario del modal -->
                 <div class="modal-form">
                     <div class="modal-form-row-single">
-                        <!-- Descripción -->
                         <div class="form-group">
-                            <label>Descripción <span class="required">*</span></label>
-                            <input type="text" placeholder="Ingrese Descripción" v-model="marcaForm.descripcion" />
+                            <label>Nombre <span class="required">*</span></label>
+                            <input type="text" placeholder="Ingrese Nombre" v-model="marcaForm.nombre" />
                         </div>
 
-                        <!-- ID Marca -->
                         <div class="form-group">
                             <label>ID Marca <span class="required">*</span></label>
                             <input type="text" value="999999" disabled class="disabled-input" />
                         </div>
                     </div>
 
-                    <div class="modal-form-row-full">
-                        <!-- Nombre -->
-                        <div class="form-group">
-                            <label>Nombre <span class="required">*</span></label>
-                            <input type="text" placeholder="Ingrese Nombre" v-model="marcaForm.nombre" />
-                        </div>
-                    </div>
                 </div>
 
-                <!-- Botones de acción del modal -->
                 <div class="modal-actions">
                     <button class="btn-cancel" @click="closeMarcaModal">Cancelar</button>
                     <button class="btn-submit" @click="saveMarcaModal">Cargar</button>
                 </div>
             </div>
         </div>
+
+        <!-- Modal Presentación -->
+        <div v-if="showPresentacionModal" class="modal-overlay" @click="closePresentacionModal">
+            <div class="modal-content modal-small" @click.stop>
+                <div class="modal-header">
+                    <div class="breadcrumb">
+                        <span>Inicio</span>
+                        <span class="separator">/</span>
+                        <span>Producto</span>
+                        <span class="separator">/</span>
+                        <span class="active">Presentación</span>
+                    </div>
+                    <button class="btn-close" @click="closePresentacionModal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <h2 class="modal-title">Presentación</h2>
+
+                <div class="modal-form">
+                    <div class="modal-form-row-single">
+                        <div class="form-group">
+                            <label>Nombre <span class="required">*</span></label>
+                            <input type="text" placeholder="Ingrese Nombre" v-model="presentacionForm.nombre" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>ID Presentación <span class="required">*</span></label>
+                            <input type="text" value="999999" disabled class="disabled-input" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-cancel" @click="closePresentacionModal">Cancelar</button>
+                    <button class="btn-submit" @click="savePresentacionModal">Cargar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Proveedor -->
+        <div v-if="showProveedorModal" class="modal-overlay" @click="closeProveedorModal">
+            <div class="modal-content modal-small" @click.stop>
+                <div class="modal-header">
+                    <div class="breadcrumb">
+                        <span>Inicio</span>
+                        <span class="separator">/</span>
+                        <span>Producto</span>
+                        <span class="separator">/</span>
+                        <span class="active">Proveedor</span>
+                    </div>
+                    <button class="btn-close" @click="closeProveedorModal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <h2 class="modal-title">Proveedor</h2>
+
+                <div class="modal-form">
+                    <div class="modal-form-row-single">
+                        <div class="form-group">
+                            <label>Nombre <span class="required">*</span></label>
+                            <input type="text" placeholder="Ingrese Nombre" v-model="proveedorForm.nombre" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>ID Proveedor <span class="required">*</span></label>
+                            <input type="text" value="999999" disabled class="disabled-input" />
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-cancel" @click="closeProveedorModal">Cancelar</button>
+                    <button class="btn-submit" @click="saveProveedorModal">Cargar</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
+
+
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 
-const showModal = ref(false);
-const showMarcaModal = ref(false);
-
+/* ---------------------------
+   Formulario principal
+---------------------------- */
 const form = reactive({
+    id: '',
     nombreProducto: '',
     precioUnitario: '',
     puntoCritico: '',
@@ -338,60 +372,248 @@ const form = reactive({
     productoGenerico: '',
     rotacion: 'A',
     marca: '',
+    presentacion: '',
     cantidad: '',
     unidadMedida: '',
     proveedor: ''
 });
 
-const modalForm = reactive({
-    descripcion: '',
-    nombre: '',
-    categoria: ''
+const productos = ref([]);
+const marcas = ref(['Playadito', 'Taragüí', 'Rosamonte']);
+const presentaciones = ref(['Bolsa 500g', 'Bolsa 1kg', 'Caja 12 unidades']);
+const proveedores = ref(['Proveedor 1', 'Proveedor 2', 'Proveedor 3']);
+
+/* LISTA de genéricos (ahora reactiva) */
+const productoGenericos = ref(['Yerba', 'Café', 'Té']);
+
+/* control y estado */
+const editingId = ref(null);
+const formEnabled = ref(false);
+
+/* Modales */
+const showModal = ref(false);
+const showMarcaModal = ref(false);
+const showPresentacionModal = ref(false);
+const showProveedorModal = ref(false);
+
+const modalForm = reactive({ descripcion: '', nombre: '', categoria: '' });
+const marcaForm = reactive({ descripcion: '', nombre: '' });
+const presentacionForm = reactive({ descripcion: '', nombre: '' });
+const proveedorForm = reactive({ descripcion: '', nombre: '' });
+
+/* ---------------------------
+   onMounted: leer localStorage
+---------------------------- */
+onMounted(() => {
+    const productosData = localStorage.getItem('productos');
+    if (productosData) productos.value = JSON.parse(productosData);
+
+    const marcasData = localStorage.getItem('marcas');
+    if (marcasData) marcas.value = JSON.parse(marcasData);
+
+    const presentacionesData = localStorage.getItem('presentaciones');
+    if (presentacionesData) presentaciones.value = JSON.parse(presentacionesData);
+
+    const proveedoresData = localStorage.getItem('proveedores');
+    if (proveedoresData) proveedores.value = JSON.parse(proveedoresData);
+
+    const genericosData = localStorage.getItem('productoGenericos');
+    if (genericosData) productoGenericos.value = JSON.parse(genericosData);
 });
 
-const marcaForm = reactive({
-    descripcion: '',
-    nombre: ''
-});
+/* ---------------------------
+   Guardar en localStorage
+---------------------------- */
+const saveToLocalStorage = () => {
+    localStorage.setItem('productos', JSON.stringify(productos.value));
+    localStorage.setItem('marcas', JSON.stringify(marcas.value));
+    localStorage.setItem('presentaciones', JSON.stringify(presentaciones.value));
+    localStorage.setItem('proveedores', JSON.stringify(proveedores.value));
+    localStorage.setItem('productoGenericos', JSON.stringify(productoGenericos.value));
+};
 
+/* ---------------------------
+   Funciones CRUD
+---------------------------- */
 const addItem = () => {
-    console.log('Añadir');
+    formEnabled.value = true;
+    editingId.value = null;
+    Object.keys(form).forEach(k => form[k] = '');
+    form.rotacion = 'A';
+    form.id = Math.floor(100000 + Math.random() * 900000); // 👈 generate random ID here
+};
+
+const submitForm = () => {
+    if (!formEnabled.value) return;
+
+    if (!form.nombreProducto || !form.precioUnitario) {
+        alert('Complete los campos obligatorios.');
+        return;
+    }
+
+    if (editingId.value) {
+        const index = productos.value.findIndex(p => p.id === editingId.value);
+        if (index !== -1) {
+            productos.value[index] = { ...form, id: editingId.value };
+            alert('Producto modificado correctamente');
+        }
+    } else {
+        const randomId = Math.floor(100000 + Math.random() * 900000);
+        form.id = randomId;
+        const newProduct = { ...form };
+        productos.value.push(newProduct);
+        alert('Producto guardado correctamente');
+    }
+
+    saveToLocalStorage();
+    formEnabled.value = false;
+    editingId.value = null;
+    Object.keys(form).forEach(k => form[k] = '');
+    form.rotacion = 'A';
+};
+
+const selectItem = (item) => {
+    Object.assign(form, item);
+    editingId.value = item.id;
+    formEnabled.value = false;
 };
 
 const editItem = () => {
-    console.log('Editar');
+    if (!editingId.value) {
+        alert('Seleccione un producto para modificar.');
+        return;
+    }
+    formEnabled.value = true;
 };
 
 const deleteItem = () => {
-    console.log('Eliminar');
+    if (!editingId.value) {
+        alert('Seleccione un producto para eliminar.');
+        return;
+    }
+    if (confirm('¿Seguro que desea eliminar este producto?')) {
+        productos.value = productos.value.filter(p => p.id !== editingId.value);
+        saveToLocalStorage();
+        alert('Producto eliminado.');
+        editingId.value = null;
+        Object.keys(form).forEach(k => form[k] = '');
+        form.rotacion = 'A';
+        formEnabled.value = false;
+    }
 };
 
+const cancelForm = () => {
+    formEnabled.value = false;
+    editingId.value = null;
+    Object.keys(form).forEach(k => form[k] = '');
+    form.rotacion = 'A';
+};
+
+/* ---------------------------
+   Modales - Producto Genérico (ahora agrega a la lista)
+---------------------------- */
 const openModal = () => {
+    modalForm.descripcion = '';
+    modalForm.nombre = '';
+    modalForm.categoria = '';
     showModal.value = true;
 };
-
-const closeModal = () => {
-    showModal.value = false;
-};
+const closeModal = () => showModal.value = false;
 
 const saveModal = () => {
-    console.log('Guardar genérico:', modalForm);
+    const name = (modalForm.nombre || '').trim();
+    if (!name) {
+        alert('Por favor ingrese un nombre para el genérico.');
+        return;
+    }
+
+    if (!productoGenericos.value.includes(name)) {
+        productoGenericos.value.push(name);
+        saveToLocalStorage();
+    }
+
+    // Seleccionar automáticamente el genérico recién creado en el formulario
+    form.productoGenerico = name;
+
+    // limpiar y cerrar
+    modalForm.descripcion = '';
+    modalForm.nombre = '';
+    modalForm.categoria = '';
     closeModal();
 };
 
+/* ---------------------------
+   Modales - Marca / Presentación / Proveedor
+   (se mantienen igual, pero aseguro guardado en localStorage)
+---------------------------- */
 const openMarcaModal = () => {
+    marcaForm.descripcion = '';
+    marcaForm.nombre = '';
     showMarcaModal.value = true;
 };
-
-const closeMarcaModal = () => {
-    showMarcaModal.value = false;
-};
-
+const closeMarcaModal = () => showMarcaModal.value = false;
 const saveMarcaModal = () => {
-    console.log('Guardar marca:', marcaForm);
+    const name = (marcaForm.nombre || '').trim();
+    if (!name) {
+        alert('Por favor ingrese un nombre para la marca.');
+        return;
+    }
+    if (!marcas.value.includes(name)) {
+        marcas.value.push(name);
+        saveToLocalStorage();
+    }
+    form.marca = name;
+    marcaForm.descripcion = '';
+    marcaForm.nombre = '';
     closeMarcaModal();
 };
+
+const openPresentacionModal = () => {
+    presentacionForm.descripcion = '';
+    presentacionForm.nombre = '';
+    showPresentacionModal.value = true;
+};
+const closePresentacionModal = () => showPresentacionModal.value = false;
+const savePresentacionModal = () => {
+    const name = (presentacionForm.nombre || '').trim();
+    if (!name) {
+        alert('Por favor ingrese un nombre para la presentación.');
+        return;
+    }
+    if (!presentaciones.value.includes(name)) {
+        presentaciones.value.push(name);
+        saveToLocalStorage();
+    }
+    form.presentacion = name;
+    presentacionForm.descripcion = '';
+    presentacionForm.nombre = '';
+    closePresentacionModal();
+};
+
+const openProveedorModal = () => {
+    proveedorForm.descripcion = '';
+    proveedorForm.nombre = '';
+    showProveedorModal.value = true;
+};
+const closeProveedorModal = () => showProveedorModal.value = false;
+const saveProveedorModal = () => {
+    const name = (proveedorForm.nombre || '').trim();
+    if (!name) {
+        alert('Por favor ingrese un nombre para el proveedor.');
+        return;
+    }
+    if (!proveedores.value.includes(name)) {
+        proveedores.value.push(name);
+        saveToLocalStorage();
+    }
+    form.proveedor = name;
+    proveedorForm.descripcion = '';
+    proveedorForm.nombre = '';
+    closeProveedorModal();
+};
 </script>
+
+
 
 <style scoped>
 * {

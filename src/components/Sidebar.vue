@@ -6,10 +6,25 @@
         </a>
 
         <ul>
-            <li v-for="item in menuItems" :key="item.name" :class="{ active: activeItem === item.name }"
-                @click="setActive(item.name)">
-                <i :class="item.icon"></i>
-                <span>{{ item.label }}</span>
+            <li v-for="item in menuItems" :key="item.name">
+                <div :class="{ active: activeItem === item.name }" @click="handleItemClick(item.name)"
+                    class="menu-item">
+                    <i :class="item.icon"></i>
+                    <span>{{ item.label }}</span>
+                    <i v-if="item.subItems"
+                        :class="isProductsOpen ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-right'"
+                        class="chevron"></i>
+                </div>
+
+                <!-- Dropdown submenu -->
+                <ul v-if="item.subItems && isProductsOpen" class="submenu">
+                    <li v-for="subItem in item.subItems" :key="subItem.name"
+                        :class="{ active: activeItem === subItem.name }" @click.stop="handleSubItemClick(subItem.name)"
+                        class="submenu-item">
+                        <i :class="subItem.icon"></i>
+                        <span>{{ subItem.label }}</span>
+                    </li>
+                </ul>
             </li>
         </ul>
     </aside>
@@ -19,14 +34,31 @@
 import { ref } from 'vue'
 
 const activeItem = ref('Productos')
+const isProductsOpen = ref(false)
 
 const menuItems = [
-    { name: 'Productos', label: 'Productos', icon: 'fa-solid fa-box' },
+    {
+        name: 'Productos',
+        label: 'Productos',
+        icon: 'fa-solid fa-box',
+        subItems: [
+            { name: 'Categorías', label: 'Categorías', icon: 'fa-solid fa-tags' },
+            { name: 'Inventario', label: 'Inventario', icon: 'fa-solid fa-clipboard-list' },
+            { name: 'Precios', label: 'Precios', icon: 'fa-solid fa-dollar-sign' }
+        ]
+    },
     { name: 'Stock', label: 'Stock', icon: 'fa-solid fa-cubes' },
     { name: 'Proveedores', label: 'Proveedores', icon: 'fa-solid fa-truck' },
 ]
 
-function setActive(name) {
+function handleItemClick(name) {
+    if (name === 'Productos') {
+        isProductsOpen.value = !isProductsOpen.value
+    }
+    activeItem.value = name
+}
+
+function handleSubItemClick(name) {
     activeItem.value = name
 }
 </script>
@@ -67,6 +99,10 @@ ul {
 }
 
 li {
+    list-style: none;
+}
+
+.menu-item {
     display: flex;
     align-items: center;
     gap: 1em;
@@ -76,32 +112,77 @@ li {
 }
 
 /* Default state */
-li i {
+.menu-item i {
     color: var(--sidebar-base-text);
     /* icon black */
     font-size: 1.2rem;
 }
 
-li span {
+.menu-item span {
     color: var(--sidebar-base-text);
     /* text black */
     font-weight: 500;
 }
 
+.menu-item .chevron {
+    margin-left: auto;
+    font-size: 0.8rem;
+}
+
 /* Hover */
-li:hover {
+.menu-item:hover {
     background-color: rgba(231, 76, 60, 0.1);
 }
 
 /* Active state */
-li.active {
+.menu-item.active {
     background-color: #e74c3c;
 }
 
-li.active i,
-li.active span {
+.menu-item.active i,
+.menu-item.active span {
     color: white;
     /* both icon and text turn white */
+}
+
+/* Submenu styles */
+.submenu {
+    background-color: #f5f5f5;
+    padding: 0;
+    margin: 0;
+}
+
+.submenu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    padding: 10px 20px 10px 50px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.submenu-item i {
+    color: var(--sidebar-base-text);
+    font-size: 1rem;
+}
+
+.submenu-item span {
+    color: var(--sidebar-base-text);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.submenu-item:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.submenu-item.active {
+    background-color: #e74c3c;
+}
+
+.submenu-item.active i,
+.submenu-item.active span {
+    color: white;
 }
 
 /* Responsive */
@@ -136,15 +217,21 @@ li.active span {
         margin: 0;
     }
 
-    li {
+    .menu-item {
         justify-content: center;
         padding: 12px 0;
         gap: 0;
     }
 
-    li span {
+    .menu-item span,
+    .menu-item .chevron {
         display: none;
-        /* hide menu text */
+        /* hide menu text and chevron */
+    }
+
+    .submenu {
+        display: none;
+        /* hide submenu on mobile */
     }
 }
 </style>
