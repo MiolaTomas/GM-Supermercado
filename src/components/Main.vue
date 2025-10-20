@@ -105,9 +105,23 @@
                     </div>
 
                     <!-- Código de Barra -->
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Código de Barra</label>
                         <input type="text" value="9999999999999" disabled class="disabled-input" />
+                    </div> -->
+                    <div class="form-group">
+                        <label>Código de barra</label>
+                        <div class="input-with-button">
+                            <input type="text" v-model="form.codigoBarra" :disabled="!formEnabled"
+                                placeholder="Ingrese código o genere uno" />
+                            <button type="button" class="btn-generate" @click="generateBarcode"
+                                :disabled="!formEnabled">
+                                Generar
+                            </button>
+                        </div>
+
+                        <!-- Código de barra -->
+                        <canvas v-show="form.codigoBarra" ref="barcodeCanvas" class="barcode-canvas" />
                     </div>
 
                     <!-- Imagen -->
@@ -358,8 +372,8 @@
 
 
 <script setup>
-import { reactive, ref, onMounted } from 'vue';
-
+import { reactive, ref, onMounted, watch } from 'vue';
+import JsBarcode from 'jsbarcode';
 /* ---------------------------
    Formulario principal
 ---------------------------- */
@@ -376,6 +390,52 @@ const form = reactive({
     cantidad: '',
     unidadMedida: '',
     proveedor: ''
+});
+
+const barcodeCanvas = ref(null); // canvas reference
+
+// Watch for changes in form.codigoBarra and redraw barcode automatically
+watch(() => form.codigoBarra, (newVal) => {
+    if (newVal && barcodeCanvas.value) {
+        JsBarcode(barcodeCanvas.value, newVal, {
+            format: "CODE128",
+            lineColor: "#000",
+            width: 2,
+            height: 30,
+            displayValue: true,
+        });
+    } else if (barcodeCanvas.value) {
+        const ctx = barcodeCanvas.value.getContext("2d");
+        ctx.clearRect(0, 0, barcodeCanvas.value.width, barcodeCanvas.value.height);
+    }
+});
+
+// Optional: function to generate a random code and render it
+const generateBarcode = () => {
+    const randomCode = Math.floor(100000000000 + Math.random() * 900000000000).toString();
+    form.codigoBarra = randomCode;
+    if (barcodeCanvas.value) {
+        JsBarcode(barcodeCanvas.value, randomCode, {
+            format: "CODE128",
+            lineColor: "#000",
+            width: 2,
+            height: 50,
+            displayValue: true,
+        });
+    }
+};
+
+// If form already has a code when editing, draw it on mount
+onMounted(() => {
+    if (form.codigoBarra && barcodeCanvas.value) {
+        JsBarcode(barcodeCanvas.value, form.codigoBarra, {
+            format: "CODE128",
+            lineColor: "#000",
+            width: 2,
+            height: 50,
+            displayValue: true,
+        });
+    }
 });
 
 const productos = ref([]);
@@ -619,6 +679,48 @@ const saveProveedorModal = () => {
 * {
     box-sizing: border-box;
 }
+
+.input-with-button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    /* 👈 espacio mínimo entre input y botón */
+}
+
+.input-with-button input {
+    flex: 1;
+    padding: 6px;
+}
+
+.btn-generate {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-generate:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.barcode-canvas {
+    margin-top: 4px;
+    max-width: 100%;
+    height: auto;
+    border: none;
+    display: block;
+}
+
+canvas {
+    margin-top: 4px;
+    /* 👈 más compacto */
+    max-width: 100%;
+}
+
 
 .main-container {
     background-color: #f5f5f5;
