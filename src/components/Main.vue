@@ -125,12 +125,17 @@
                     </div>
 
                     <!-- Imagen -->
-                    <div class="form-group">
-                        <label>Imagen</label>
-                        <div class="image-upload" :class="{ disabled: !formEnabled }">
-                            <i class="fa-solid fa-image"></i>
-                            <span>Subir una imagen</span>
-                        </div>
+                    <div class="image-upload" @click="$refs.imageInput.click()">
+                        <i class="fa-solid fa-image"></i>
+                        <span v-if="!form.imagenPreview">Haga click para subir imagen</span>
+                        <span v-else>Cambiar imagen</span>
+                        <input type="file" id="image" accept="image/*" @change="onImageSelected" ref="imageInput"
+                            hidden />
+                    </div>
+
+                    <!-- Image preview -->
+                    <div v-if="form.imagenPreview" class="image-preview">
+                        <img :src="form.imagenPreview" alt="Vista previa del producto" />
                     </div>
 
                     <!-- Marca -->
@@ -389,8 +394,25 @@ const form = reactive({
     presentacion: '',
     cantidad: '',
     unidadMedida: '',
-    proveedor: ''
+    proveedor: '',
+    imagenPreview: null,
+    imagen: null
 });
+
+function onImageSelected(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    form.imagen = file; // ✅ reactive object, no .value
+
+    // Create a local preview URL
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        form.imagenPreview = e.target.result; // ✅ reactive object, no .value
+    };
+    reader.readAsDataURL(file);
+}
+
 
 const barcodeCanvas = ref(null); // canvas reference
 
@@ -678,6 +700,52 @@ const saveProveedorModal = () => {
 <style scoped>
 * {
     box-sizing: border-box;
+}
+
+.image-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.image-upload:hover {
+    border-color: #3b82f6;
+    background-color: #eef4ff;
+}
+
+.image-upload i {
+    font-size: 2rem;
+    color: #9ca3af;
+    margin-bottom: 0.5rem;
+}
+
+.image-upload span {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.image-upload span:hover {
+    color: #3b82f6;
+    text-decoration: underline;
+}
+
+
+.image-preview {
+    margin-top: 10px;
+}
+
+.image-preview img {
+    max-width: 150px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .input-with-button {
