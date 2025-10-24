@@ -11,7 +11,7 @@
                     <i class="fa-solid fa-pen"></i>
                     <span>Modificar</span>
                 </button>
-                <button class="btn-add btn-delete" @click="deleteItem">
+                <button class="btn-add btn-delete" @click="confirmDelete">
                     <i class="fa-solid fa-trash"></i>
                     <span>Eliminar</span>
                 </button>
@@ -414,6 +414,19 @@
             </div>
         </div>
     </div>
+
+    <div v-if="showDeleteModal" class="modal-overlay">
+        <div class="modal confirm-delete">
+            <div class="icon-alert">!</div>
+            <h3>¿Estás seguro?</h3>
+            <p>El producto "<strong>{{ form.nombreProducto }}</strong>" será eliminado y no podrá ser recuperado.</p>
+            <div class="modal-buttons">
+                <button class="btn-cancel" @click="showDeleteModal = false">Cancelar</button>
+                <button class="btn-danger" @click="deleteProduct">Sí, borrar ahora!</button>
+            </div>
+        </div>
+    </div>
+
 </template>
 
 
@@ -443,6 +456,30 @@ const form = reactive({
     imagenPreview: null,
     imagen: null
 });
+
+const showDeleteModal = ref(false);
+const productToDelete = ref(null);
+
+const confirmDelete = () => {
+    if (!form.id) {
+        alert("No hay un producto seleccionado.");
+        return;
+    }
+    productToDelete.value = form.id;
+    showDeleteModal.value = true;
+};
+
+const deleteProduct = () => {
+    productos.value = productos.value.filter(p => p.id !== productToDelete.value);
+    saveToLocalStorage();
+    alert("Producto eliminado correctamente.");
+    showDeleteModal.value = false;
+    productToDelete.value = null;
+
+    // Limpia el formulario
+    Object.keys(form).forEach(k => form[k] = '');
+    form.imagenPreview = null;
+};
 
 const currentIndex = ref(0);
 
@@ -864,6 +901,85 @@ const saveProveedorModal = () => {
 * {
     box-sizing: border-box;
 }
+
+/* Estos son los estilos del modal de eliminar producto */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal.confirm-delete {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px 40px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.icon-alert {
+    font-size: 40px;
+    color: #f39c12;
+    border: 3px solid #f39c12;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-weight: bold;
+}
+
+.modal h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.modal p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-cancel {
+    background: #ccc;
+    color: #333;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-danger {
+    background: #42b542;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.btn-danger:hover {
+    background: #236123;
+}
+
+/* Estos son los estilos del modal de eliminar producto */
 
 
 .image-upload {
