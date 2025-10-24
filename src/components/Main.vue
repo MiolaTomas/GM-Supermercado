@@ -59,8 +59,9 @@
                     <!-- Precio Unitario -->
                     <div class="form-group">
                         <label>Precio Unitario <span class="required">*</span></label>
-                        <input type="text" placeholder="Ingrese el precio de producto" v-model="form.precioUnitario"
-                            :disabled="!formEnabled" />
+                        <input type="number" placeholder="Ingrese el precio de producto" v-model="form.precioUnitario"
+                            :disabled="!formEnabled" @input="validatePrecio" min="0.01" step="0.01" />
+                        <p v-if="errors.precio" class="error-message">{{ errors.precio }}</p>
                     </div>
 
 
@@ -76,7 +77,8 @@
                     <div class="form-group">
                         <label>Existencias</label>
                         <input type="text" placeholder="Ingrese la cantidad de existencias" v-model="form.existencias"
-                            :disabled="!formEnabled" />
+                            :disabled="!formEnabled" @input="validateExistencias" />
+                        <p v-if="errors.existencias" class="error-message">{{ errors.existencias }}</p>
                     </div>
 
 
@@ -479,6 +481,37 @@ const form = reactive({
     imagen: null
 });
 
+const errors = reactive({
+    existencias: '',
+    precio: ''
+});
+
+const validatePrecio = () => {
+    const value = parseFloat(form.precioUnitario);
+    if (isNaN(value) || value <= 0) {
+        errors.precio = 'Ingrese un número válido mayor a 0.';
+        return false;
+    }
+    errors.precio = '';
+    return true;
+};
+
+
+const validateExistencias = () => {
+    if (!form.existencias) {
+        errors.existencias = 'Este campo es obligatorio.';
+        return false;
+    }
+    const num = Number(form.existencias);
+    if (isNaN(num) || num <= 0) {
+        errors.existencias = 'Ingrese un número mayor a 0.';
+        return false;
+    }
+    errors.existencias = '';
+    return true;
+};
+
+
 const searchQuery = ref('');
 const filteredProductos = ref([]);
 
@@ -777,10 +810,6 @@ const submitForm = () => {
 };
 
 
-
-
-
-
 const selectItem = (item) => {
     Object.assign(form, item);
     editingId.value = item.id;
@@ -794,9 +823,6 @@ const selectItem = (item) => {
     searchQuery.value = '';
     filteredProductos.value = [];
 };
-
-
-
 
 
 const editItem = () => {
@@ -953,6 +979,13 @@ const saveProveedorModal = () => {
 * {
     box-sizing: border-box;
 }
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 2px;
+}
+
 
 .search-container {
     position: relative;
