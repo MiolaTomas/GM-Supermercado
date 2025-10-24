@@ -68,8 +68,9 @@
                     <!-- Punto crítico de reposición -->
                     <div class="form-group">
                         <label>Punto crítico de reposición <span class="required">*</span></label>
-                        <input type="text" placeholder="Ingrese el número de pun..." v-model="form.puntoCritico"
-                            :disabled="!formEnabled" />
+                        <input type="number" placeholder="Ingrese el punto crítico" v-model="form.puntoCritico"
+                            :disabled="!formEnabled" @input="validatePuntoCritico" min="1" />
+                        <span class="error-message" v-if="errors.puntoCritico">{{ errors.puntoCritico }}</span>
                     </div>
 
 
@@ -483,8 +484,20 @@ const form = reactive({
 
 const errors = reactive({
     existencias: '',
-    precio: ''
+    precio: '',
+    puntoCritico: ''
 });
+
+const validatePuntoCritico = () => {
+    const value = Number(form.puntoCritico);
+    if (isNaN(value) || value <= 0) {
+        errors.puntoCritico = 'Ingrese un número válido mayor a 0.';
+        return false;
+    }
+    errors.puntoCritico = '';
+    return true;
+};
+
 
 const validatePrecio = () => {
     const value = parseFloat(form.precioUnitario);
