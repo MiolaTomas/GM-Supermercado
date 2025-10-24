@@ -15,10 +15,24 @@
                     <i class="fa-solid fa-trash"></i>
                     <span>Eliminar</span>
                 </button>
+
+
+
             </div>
 
 
             <div class="navigation-buttons">
+                <div class="search-container">
+                    <input type="text" placeholder="Buscar producto..." v-model="searchQuery"
+                        @input="filterProductos" />
+                    <ul v-if="filteredProductos.length" class="autocomplete-list">
+                        <li v-for="p in filteredProductos" :key="p.id" @click="selectItem(p)">
+                            {{ p.nombreProducto }}
+                        </li>
+                    </ul>
+                </div>
+
+
                 <button class="nav-btn" @click="showFirstItem">«</button>
                 <button class="nav-btn" @click="showPrevious">&lt;</button>
                 <button class="nav-btn" @click="showNext">&gt;</button>
@@ -427,6 +441,14 @@
         </div>
     </div>
 
+    <!-- Esto es para la notificacion -->
+
+    <div v-if="showToast" class="toast">
+        {{ toastMessage }}
+    </div>
+
+    <!-- Esto es para la notificacion -->
+
 </template>
 
 
@@ -457,8 +479,34 @@ const form = reactive({
     imagen: null
 });
 
+const searchQuery = ref('');
+const filteredProductos = ref([]);
+
+
+const filterProductos = () => {
+    const query = searchQuery.value.toLowerCase();
+    if (!query) {
+        filteredProductos.value = [];
+        return;
+    }
+    filteredProductos.value = productos.value.filter(p =>
+        p.nombreProducto.toLowerCase().includes(query)
+    );
+};
+
+
+
 const showDeleteModal = ref(false);
 const productToDelete = ref(null);
+
+const showToast = ref(false);
+const toastMessage = ref('');
+
+const triggerToast = (message) => {
+    toastMessage.value = message;
+    showToast.value = true;
+    setTimeout(() => showToast.value = false, 3000); // se oculta a los 3s
+};
 
 const confirmDelete = () => {
     if (!form.id) {
@@ -472,7 +520,7 @@ const confirmDelete = () => {
 const deleteProduct = () => {
     productos.value = productos.value.filter(p => p.id !== productToDelete.value);
     saveToLocalStorage();
-    alert("Producto eliminado correctamente.");
+    triggerToast('Producto eliminado correctamente');
     showDeleteModal.value = false;
     productToDelete.value = null;
 
@@ -704,10 +752,10 @@ const submitForm = () => {
     const index = productosGuardados.findIndex(p => p.id === form.id);
     if (index !== -1) {
         productosGuardados[index] = newProduct;
-        alert('Producto modificado correctamente');
+        triggerToast('Producto modificado correctamente');
     } else {
         productosGuardados.push(newProduct);
-        alert('Producto guardado correctamente');
+        triggerToast('Producto cargado correctamente');
     }
 
 
@@ -738,11 +786,15 @@ const selectItem = (item) => {
     editingId.value = item.id;
     formEnabled.value = false;
 
-
     // Imagen
-    form.imagenPreview = item.imagen || null; // base64
-    form.imagen = null; // opcional: solo si querés que no se reemplace el archivo
+    form.imagenPreview = item.imagen || null;
+    form.imagen = null;
+
+    // Limpiar búsqueda y resultados
+    searchQuery.value = '';
+    filteredProductos.value = [];
 };
+
 
 
 
@@ -901,6 +953,79 @@ const saveProveedorModal = () => {
 * {
     box-sizing: border-box;
 }
+
+.search-container {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+    /* ajusta según el espacio que quieras */
+}
+
+.search-container input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.search-container input:focus {
+    border-color: #3b82f6;
+}
+
+.autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    margin-top: 2px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    list-style: none;
+}
+
+.autocomplete-list li {
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.autocomplete-list li:hover {
+    background-color: #f3f4f6;
+}
+
+
+
+.toast {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: #ffffff;
+    /* fondo blanco */
+    border-left: 6px solid #16a34a;
+    /* barra verde a la izquierda */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* sombra sutil */
+    border-radius: 4px;
+    color: #111827;
+    /* texto oscuro */
+    font-weight: 500;
+    max-width: 320px;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2000;
+}
+
+
 
 /* Estos son los estilos del modal de eliminar producto */
 
