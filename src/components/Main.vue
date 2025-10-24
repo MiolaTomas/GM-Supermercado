@@ -17,13 +17,17 @@
                 </button>
             </div>
 
+
             <div class="navigation-buttons">
-                <button class="nav-btn">&lt;&lt;</button>
-                <button class="nav-btn">&lt;</button>
-                <button class="nav-btn">&gt;</button>
-                <button class="nav-btn">&gt;&gt;</button>
+                <button class="nav-btn" @click="showFirstItem">«</button>
+                <button class="nav-btn" @click="showPrevious">&lt;</button>
+                <button class="nav-btn" @click="showNext">&gt;</button>
+                <button class="nav-btn" @click="showLast">»</button>
             </div>
+
+
         </div>
+
 
         <!-- Formulario -->
         <div class="form-container">
@@ -37,12 +41,14 @@
                             :disabled="!formEnabled" />
                     </div>
 
+
                     <!-- Precio Unitario -->
                     <div class="form-group">
                         <label>Precio Unitario <span class="required">*</span></label>
                         <input type="text" placeholder="Ingrese el precio de producto" v-model="form.precioUnitario"
                             :disabled="!formEnabled" />
                     </div>
+
 
                     <!-- Punto crítico de reposición -->
                     <div class="form-group">
@@ -51,12 +57,14 @@
                             :disabled="!formEnabled" />
                     </div>
 
+
                     <!-- Existencias -->
                     <div class="form-group">
                         <label>Existencias</label>
                         <input type="text" placeholder="Ingrese la cantidad de existencias" v-model="form.existencias"
                             :disabled="!formEnabled" />
                     </div>
+
 
                     <!-- Producto Generico -->
                     <div class="form-group">
@@ -72,6 +80,7 @@
                             </button>
                         </div>
                     </div>
+
 
                     <!-- Rotación -->
                     <div class="form-group">
@@ -96,6 +105,7 @@
                     </div>
                 </div>
 
+
                 <!-- Columna derecha -->
                 <div class="form-column">
                     <!-- ID -->
@@ -103,6 +113,7 @@
                         <label>ID</label>
                         <input type="text" :value="form.id || editingId || '—'" disabled class="disabled-input" />
                     </div>
+
 
                     <!-- Código de Barra -->
                     <!-- <div class="form-group">
@@ -120,9 +131,11 @@
                             </button>
                         </div>
 
+
                         <!-- Código de barra -->
                         <canvas v-show="form.codigoBarra" ref="barcodeCanvas" class="barcode-canvas" />
                     </div>
+
 
                     <!-- Imagen -->
                     <div class="image-upload" @click="$refs.imageInput.click()">
@@ -133,10 +146,12 @@
                             hidden />
                     </div>
 
+
                     <!-- Image preview -->
                     <div v-if="form.imagenPreview" class="image-preview">
                         <img :src="form.imagenPreview" alt="Vista previa del producto" />
                     </div>
+
 
                     <!-- Marca -->
                     <div class="form-group">
@@ -153,6 +168,7 @@
                         </div>
                     </div>
 
+
                     <!-- Presentación (DROPDOWN + BUTTON) -->
                     <div class="form-group">
                         <label>Presentación <span class="required">*</span></label>
@@ -167,6 +183,7 @@
                             </button>
                         </div>
                     </div>
+
 
                     <!-- Proveedor -->
                     <div class="form-group">
@@ -185,6 +202,7 @@
                 </div>
             </div>
 
+
             <!-- Botones del formulario -->
             <div class="form-actions">
                 <button class="btn-cancel" type="button" @click="cancelForm">Cancelar</button>
@@ -193,6 +211,7 @@
                 </button>
             </div>
         </div>
+
 
         <!-- Modal Producto Genérico -->
         <div v-if="showModal" class="modal-overlay" @click="closeModal">
@@ -210,7 +229,9 @@
                     </button>
                 </div>
 
+
                 <h2 class="modal-title">Genérico</h2>
+
 
                 <div class="modal-form">
                     <div class="modal-form-row">
@@ -224,12 +245,14 @@
                         </div>
                     </div>
 
+
                     <!-- <div class="modal-form-row">
                         <div class="form-group">
                             <label>Nombre <span class="required">*</span></label>
                             <input type="text" placeholder="Ingrese Nombre" v-model="modalForm.nombre" />
                         </div>
                     </div> -->
+
 
                     <div class="modal-form-row">
                         <div class="form-group">
@@ -245,12 +268,14 @@
                     </div>
                 </div>
 
+
                 <div class="modal-actions">
                     <button class="btn-cancel" @click="closeModal">Cancelar</button>
                     <button class="btn-submit" @click="saveModal">Cargar</button>
                 </div>
             </div>
         </div>
+
 
         <!-- Modal Marca -->
         <div v-if="showMarcaModal" class="modal-overlay" @click="closeMarcaModal">
@@ -268,7 +293,9 @@
                     </button>
                 </div>
 
+
                 <h2 class="modal-title">Marca</h2>
+
 
                 <div class="modal-form">
                     <div class="modal-form-row-single">
@@ -277,13 +304,16 @@
                             <input type="text" placeholder="Ingrese Nombre" v-model="marcaForm.nombre" />
                         </div>
 
+
                         <div class="form-group">
                             <label>ID Marca <span class="required">*</span></label>
                             <input type="text" value="999999" disabled class="disabled-input" />
                         </div>
                     </div>
 
+
                 </div>
+
 
                 <div class="modal-actions">
                     <button class="btn-cancel" @click="closeMarcaModal">Cancelar</button>
@@ -291,6 +321,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Modal Presentación -->
         <div v-if="showPresentacionModal" class="modal-overlay" @click="closePresentacionModal">
@@ -308,7 +339,9 @@
                     </button>
                 </div>
 
+
                 <h2 class="modal-title">Presentación</h2>
+
 
                 <div class="modal-form">
                     <div class="modal-form-row-single">
@@ -317,6 +350,7 @@
                             <input type="text" placeholder="Ingrese Nombre" v-model="presentacionForm.nombre" />
                         </div>
 
+
                         <div class="form-group">
                             <label>ID Presentación <span class="required">*</span></label>
                             <input type="text" value="999999" disabled class="disabled-input" />
@@ -324,12 +358,14 @@
                     </div>
                 </div>
 
+
                 <div class="modal-actions">
                     <button class="btn-cancel" @click="closePresentacionModal">Cancelar</button>
                     <button class="btn-submit" @click="savePresentacionModal">Cargar</button>
                 </div>
             </div>
         </div>
+
 
         <!-- Modal Proveedor -->
         <div v-if="showProveedorModal" class="modal-overlay" @click="closeProveedorModal">
@@ -347,7 +383,9 @@
                     </button>
                 </div>
 
+
                 <h2 class="modal-title">Proveedor</h2>
+
 
                 <div class="modal-form">
                     <div class="modal-form-row-single">
@@ -356,6 +394,7 @@
                             <input type="text" placeholder="Ingrese Nombre" v-model="proveedorForm.nombre" />
                         </div>
 
+
                         <div class="form-group">
                             <label>ID Proveedor <span class="required">*</span></label>
                             <input type="text" value="999999" disabled class="disabled-input" />
@@ -363,7 +402,10 @@
                     </div>
 
 
+
+
                 </div>
+
 
                 <div class="modal-actions">
                     <button class="btn-cancel" @click="closeProveedorModal">Cancelar</button>
@@ -373,6 +415,9 @@
         </div>
     </div>
 </template>
+
+
+
 
 
 
@@ -399,11 +444,48 @@ const form = reactive({
     imagen: null
 });
 
+const currentIndex = ref(0);
+
+const showFirstItem = () => {
+    if (productos.value.length === 0) {
+        alert("No hay productos guardados.");
+        return;
+    }
+
+    currentIndex.value = 0;
+    selectItem(productos.value[currentIndex.value]);
+};
+
+
+const showPrevious = () => {
+    if (productos.value.length === 0) return;
+    if (currentIndex.value > 0) currentIndex.value--;
+    selectItem(productos.value[currentIndex.value]);
+};
+
+const showNext = () => {
+    if (productos.value.length === 0) return;
+    if (currentIndex.value < productos.value.length - 1) currentIndex.value++;
+    selectItem(productos.value[currentIndex.value]);
+};
+
+const showLast = () => {
+    if (productos.value.length === 0) return;
+    currentIndex.value = productos.value.length - 1;
+    selectItem(productos.value[currentIndex.value]);
+};
+
+
+
+
+
 function onImageSelected(event) {
     const file = event.target.files[0];
     if (!file) return;
 
+
     form.imagen = file; // ✅ reactive object, no .value
+
 
     // Create a local preview URL
     const reader = new FileReader();
@@ -414,7 +496,10 @@ function onImageSelected(event) {
 }
 
 
+
+
 const barcodeCanvas = ref(null); // canvas reference
+
 
 // Watch for changes in form.codigoBarra and redraw barcode automatically
 watch(() => form.codigoBarra, (newVal) => {
@@ -432,6 +517,7 @@ watch(() => form.codigoBarra, (newVal) => {
     }
 });
 
+
 // Optional: function to generate a random code and render it
 const generateBarcode = () => {
     const randomCode = Math.floor(100000000000 + Math.random() * 900000000000).toString();
@@ -447,6 +533,7 @@ const generateBarcode = () => {
     }
 };
 
+
 // If form already has a code when editing, draw it on mount
 onMounted(() => {
     if (form.codigoBarra && barcodeCanvas.value) {
@@ -460,17 +547,21 @@ onMounted(() => {
     }
 });
 
+
 const productos = ref([]);
 const marcas = ref(['Playadito', 'Taragüí', 'Rosamonte']);
 const presentaciones = ref(['Bolsa 500g', 'Bolsa 1kg', 'Caja 12 unidades']);
 const proveedores = ref(['Proveedor 1', 'Proveedor 2', 'Proveedor 3']);
 
+
 /* LISTA de genéricos (ahora reactiva) */
 const productoGenericos = ref(['Yerba', 'Café', 'Té']);
+
 
 /* control y estado */
 const editingId = ref(null);
 const formEnabled = ref(false);
+
 
 /* Modales */
 const showModal = ref(false);
@@ -478,10 +569,12 @@ const showMarcaModal = ref(false);
 const showPresentacionModal = ref(false);
 const showProveedorModal = ref(false);
 
+
 const modalForm = reactive({ descripcion: '', nombre: '', categoria: '' });
 const marcaForm = reactive({ descripcion: '', nombre: '' });
 const presentacionForm = reactive({ descripcion: '', nombre: '' });
 const proveedorForm = reactive({ descripcion: '', nombre: '' });
+
 
 /* ---------------------------
    onMounted: leer localStorage
@@ -490,18 +583,23 @@ onMounted(() => {
     const productosData = localStorage.getItem('productos');
     if (productosData) productos.value = JSON.parse(productosData);
 
+
     const marcasData = localStorage.getItem('marcas');
     if (marcasData) marcas.value = JSON.parse(marcasData);
+
 
     const presentacionesData = localStorage.getItem('presentaciones');
     if (presentacionesData) presentaciones.value = JSON.parse(presentacionesData);
 
+
     const proveedoresData = localStorage.getItem('proveedores');
     if (proveedoresData) proveedores.value = JSON.parse(proveedoresData);
+
 
     const genericosData = localStorage.getItem('productoGenericos');
     if (genericosData) productoGenericos.value = JSON.parse(genericosData);
 });
+
 
 /* ---------------------------
    Guardar en localStorage
@@ -514,6 +612,7 @@ const saveToLocalStorage = () => {
     localStorage.setItem('productoGenericos', JSON.stringify(productoGenericos.value));
 };
 
+
 /* ---------------------------
    Funciones CRUD
 ---------------------------- */
@@ -525,40 +624,91 @@ const addItem = () => {
     form.id = Math.floor(100000 + Math.random() * 900000); // 👈 generate random ID here
 };
 
+
 const submitForm = () => {
     if (!formEnabled.value) return;
 
+
+    // Validaciones mínimas
     if (!form.nombreProducto || !form.precioUnitario) {
         alert('Complete los campos obligatorios.');
         return;
     }
 
-    if (editingId.value) {
-        const index = productos.value.findIndex(p => p.id === editingId.value);
-        if (index !== -1) {
-            productos.value[index] = { ...form, id: editingId.value };
-            alert('Producto modificado correctamente');
-        }
+
+    // Generar ID si no existe
+    if (!form.id) {
+        form.id = Math.floor(100000 + Math.random() * 900000);
+    }
+
+
+    // Leer productos existentes desde localStorage
+    const productosGuardados = JSON.parse(localStorage.getItem("productos")) || [];
+
+
+    // Crear objeto producto completo
+    const newProduct = {
+        id: form.id,
+        nombreProducto: form.nombreProducto,
+        precioUnitario: form.precioUnitario,
+        puntoCritico: form.puntoCritico,
+        existencias: form.existencias,
+        productoGenerico: form.productoGenerico,
+        rotacion: form.rotacion,
+        marca: form.marca,
+        presentacion: form.presentacion,
+        proveedor: form.proveedor,
+        codigoBarra: form.codigoBarra,
+        imagen: form.imagenPreview || null,
+    };
+
+
+    // Agregar o modificar producto
+    const index = productosGuardados.findIndex(p => p.id === form.id);
+    if (index !== -1) {
+        productosGuardados[index] = newProduct;
+        alert('Producto modificado correctamente');
     } else {
-        const randomId = Math.floor(100000 + Math.random() * 900000);
-        form.id = randomId;
-        const newProduct = { ...form };
-        productos.value.push(newProduct);
+        productosGuardados.push(newProduct);
         alert('Producto guardado correctamente');
     }
 
-    saveToLocalStorage();
+
+    // Guardar lista completa en localStorage
+    localStorage.setItem("productos", JSON.stringify(productosGuardados));
+
+
+    // Actualizar variable reactiva si la usás en pantalla
+    productos.value = productosGuardados;
+
+
+    // Reset del formulario
     formEnabled.value = false;
     editingId.value = null;
     Object.keys(form).forEach(k => form[k] = '');
     form.rotacion = 'A';
+    form.imagenPreview = null;
+    form.imagen = null;
 };
+
+
+
+
+
 
 const selectItem = (item) => {
     Object.assign(form, item);
     editingId.value = item.id;
     formEnabled.value = false;
+
+
+    // Imagen
+    form.imagenPreview = item.imagen || null; // base64
+    form.imagen = null; // opcional: solo si querés que no se reemplace el archivo
 };
+
+
+
 
 const editItem = () => {
     if (!editingId.value) {
@@ -567,6 +717,7 @@ const editItem = () => {
     }
     formEnabled.value = true;
 };
+
 
 const deleteItem = () => {
     if (!editingId.value) {
@@ -584,12 +735,14 @@ const deleteItem = () => {
     }
 };
 
+
 const cancelForm = () => {
     formEnabled.value = false;
     editingId.value = null;
     Object.keys(form).forEach(k => form[k] = '');
     form.rotacion = 'A';
 };
+
 
 /* ---------------------------
    Modales - Producto Genérico (ahora agrega a la lista)
@@ -602,6 +755,7 @@ const openModal = () => {
 };
 const closeModal = () => showModal.value = false;
 
+
 const saveModal = () => {
     const name = (modalForm.nombre || '').trim();
     if (!name) {
@@ -609,13 +763,16 @@ const saveModal = () => {
         return;
     }
 
+
     if (!productoGenericos.value.includes(name)) {
         productoGenericos.value.push(name);
         saveToLocalStorage();
     }
 
+
     // Seleccionar automáticamente el genérico recién creado en el formulario
     form.productoGenerico = name;
+
 
     // limpiar y cerrar
     modalForm.descripcion = '';
@@ -623,6 +780,7 @@ const saveModal = () => {
     modalForm.categoria = '';
     closeModal();
 };
+
 
 /* ---------------------------
    Modales - Marca / Presentación / Proveedor
@@ -650,6 +808,7 @@ const saveMarcaModal = () => {
     closeMarcaModal();
 };
 
+
 const openPresentacionModal = () => {
     presentacionForm.descripcion = '';
     presentacionForm.nombre = '';
@@ -671,6 +830,7 @@ const savePresentacionModal = () => {
     presentacionForm.nombre = '';
     closePresentacionModal();
 };
+
 
 const openProveedorModal = () => {
     proveedorForm.descripcion = '';
@@ -697,10 +857,14 @@ const saveProveedorModal = () => {
 
 
 
+
+
+
 <style scoped>
 * {
     box-sizing: border-box;
 }
+
 
 .image-upload {
     display: flex;
@@ -716,10 +880,12 @@ const saveProveedorModal = () => {
     text-align: center;
 }
 
+
 .image-upload:hover {
     border-color: #3b82f6;
     background-color: #eef4ff;
 }
+
 
 .image-upload i {
     font-size: 2rem;
@@ -727,10 +893,12 @@ const saveProveedorModal = () => {
     margin-bottom: 0.5rem;
 }
 
+
 .image-upload span {
     font-size: 14px;
     color: #6b7280;
 }
+
 
 .image-upload span:hover {
     color: #3b82f6;
@@ -738,15 +906,19 @@ const saveProveedorModal = () => {
 }
 
 
+
+
 .image-preview {
     margin-top: 10px;
 }
+
 
 .image-preview img {
     max-width: 150px;
     border-radius: 8px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
+
 
 .input-with-button {
     display: flex;
@@ -755,10 +927,12 @@ const saveProveedorModal = () => {
     /* 👈 espacio mínimo entre input y botón */
 }
 
+
 .input-with-button input {
     flex: 1;
     padding: 6px;
 }
+
 
 .btn-generate {
     background-color: #4caf50;
@@ -770,10 +944,12 @@ const saveProveedorModal = () => {
     font-size: 14px;
 }
 
+
 .btn-generate:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
 
 .barcode-canvas {
     margin-top: 4px;
@@ -783,6 +959,7 @@ const saveProveedorModal = () => {
     display: block;
 }
 
+
 canvas {
     margin-top: 4px;
     /* 👈 más compacto */
@@ -790,11 +967,14 @@ canvas {
 }
 
 
+
+
 .main-container {
     background-color: #f5f5f5;
     min-height: 100vh;
     padding: 1rem;
 }
+
 
 .container {
     background-color: white;
@@ -805,10 +985,12 @@ canvas {
     margin-bottom: 1rem;
 }
 
+
 .crud-buttons {
     display: flex;
     gap: 0.75rem;
 }
+
 
 .btn-add {
     display: flex;
@@ -824,37 +1006,45 @@ canvas {
     font-size: 14px;
 }
 
+
 .btn-new {
     border-color: #16a34a;
     color: #16a34a;
 }
 
+
 .btn-new:hover {
     background-color: #f0fdf4;
 }
+
 
 .btn-edit {
     border-color: #f97316;
     color: #f97316;
 }
 
+
 .btn-edit:hover {
     background-color: #fff7ed;
 }
+
 
 .btn-delete {
     border-color: #dc2626;
     color: #dc2626;
 }
 
+
 .btn-delete:hover {
     background-color: #fef2f2;
 }
+
 
 .navigation-buttons {
     display: flex;
     gap: 0.5rem;
 }
+
 
 .nav-btn {
     padding: 0.5rem 0.75rem;
@@ -868,9 +1058,11 @@ canvas {
     font-size: 14px;
 }
 
+
 .nav-btn:hover {
     background-color: #ea580c;
 }
+
 
 /* Formulario */
 .form-container {
@@ -879,6 +1071,7 @@ canvas {
     border-radius: 4px;
 }
 
+
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -886,11 +1079,13 @@ canvas {
     margin-bottom: 2rem;
 }
 
+
 .form-column {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
+
 
 .form-group {
     display: flex;
@@ -898,15 +1093,18 @@ canvas {
     gap: 0.5rem;
 }
 
+
 .form-group label {
     font-size: 14px;
     font-weight: 600;
     color: #333;
 }
 
+
 .required {
     color: #dc2626;
 }
+
 
 .form-group input,
 .form-group select {
@@ -918,28 +1116,34 @@ canvas {
     transition: border-color 0.2s;
 }
 
+
 .form-group input:focus,
 .form-group select:focus {
     border-color: #3b82f6;
 }
 
+
 .form-group input::placeholder {
     color: #9ca3af;
 }
+
 
 .disabled-input {
     background-color: #e5e7eb;
     cursor: not-allowed;
 }
 
+
 .input-with-button {
     display: flex;
     gap: 0.5rem;
 }
 
+
 .input-with-button select {
     flex: 1;
 }
+
 
 .btn-add-field {
     padding: 0.6rem 0.8rem;
@@ -951,9 +1155,11 @@ canvas {
     transition: background-color 0.2s;
 }
 
+
 .btn-add-field:hover {
     background-color: #ea580c;
 }
+
 
 .image-upload {
     display: flex;
@@ -968,10 +1174,12 @@ canvas {
     background-color: #f9fafb;
 }
 
+
 .image-upload:hover {
     border-color: #9ca3af;
     background-color: #f3f4f6;
 }
+
 
 .image-upload i {
     font-size: 2rem;
@@ -979,15 +1187,18 @@ canvas {
     margin-bottom: 0.5rem;
 }
 
+
 .image-upload span {
     font-size: 14px;
     color: #6b7280;
 }
 
+
 .radio-group {
     display: flex;
     gap: 1.5rem;
 }
+
 
 .radio-label {
     display: flex;
@@ -997,10 +1208,12 @@ canvas {
     font-size: 14px;
 }
 
+
 .radio-label input[type="radio"] {
     width: auto;
     cursor: pointer;
 }
+
 
 .form-actions {
     display: flex;
@@ -1008,6 +1221,7 @@ canvas {
     gap: 1rem;
     margin-top: 1rem;
 }
+
 
 .btn-cancel {
     padding: 0.6rem 2rem;
@@ -1020,9 +1234,11 @@ canvas {
     transition: background-color 0.2s;
 }
 
+
 .btn-cancel:hover {
     background-color: #b91c1c;
 }
+
 
 .btn-submit {
     padding: 0.6rem 2rem;
@@ -1035,19 +1251,23 @@ canvas {
     transition: background-color 0.2s;
 }
 
+
 .btn-submit:hover {
     background-color: #15803d;
 }
+
 
 @media (max-width: 768px) {
     .form-row {
         grid-template-columns: 1fr;
     }
 
+
     .container {
         flex-direction: column;
     }
 }
+
 
 /* Modal Styles */
 .modal-overlay {
@@ -1063,6 +1283,7 @@ canvas {
     z-index: 1000;
 }
 
+
 .modal-content {
     background-color: white;
     border-radius: 8px;
@@ -1073,6 +1294,7 @@ canvas {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
+
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -1081,19 +1303,23 @@ canvas {
     border-bottom: 1px solid #e5e7eb;
 }
 
+
 .breadcrumb {
     font-size: 12px;
     color: #6b7280;
 }
 
+
 .breadcrumb .separator {
     margin: 0 0.5rem;
 }
+
 
 .breadcrumb .active {
     color: #111827;
     font-weight: 600;
 }
+
 
 .btn-close {
     background: none;
@@ -1111,9 +1337,11 @@ canvas {
     transition: background-color 0.2s;
 }
 
+
 .btn-close:hover {
     background-color: #f3f4f6;
 }
+
 
 .modal-title {
     font-size: 1.5rem;
@@ -1122,11 +1350,13 @@ canvas {
     margin: 0;
 }
 
+
 .modal-crud-buttons {
     display: flex;
     gap: 0.75rem;
     padding: 0 1.5rem 1rem;
 }
+
 
 .modal-form {
     padding: 0 1.5rem 1rem;
@@ -1135,15 +1365,18 @@ canvas {
     gap: 1rem;
 }
 
+
 .modal-form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
 
+
 .modal-form-row:last-of-type {
     grid-template-columns: 1fr;
 }
+
 
 .modal-actions {
     display: flex;
@@ -1153,9 +1386,11 @@ canvas {
     border-top: 1px solid #e5e7eb;
 }
 
+
 .modal-small {
     max-width: 500px;
 }
+
 
 .modal-form-row-single {
     display: grid;
@@ -1163,20 +1398,24 @@ canvas {
     gap: 1rem;
 }
 
+
 .modal-form-row-full {
     display: grid;
     grid-template-columns: 1fr;
 }
+
 
 .presentation-input {
     display: flex;
     gap: 0.5rem;
 }
 
+
 .quantity-input {
     width: 40%;
     min-width: 80px;
 }
+
 
 .unit-select {
     flex: 1;
