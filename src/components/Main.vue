@@ -880,7 +880,8 @@ const selectItem = (item) => {
 
 const editItem = () => {
     if (!editingId.value) {
-        alert('Seleccione un producto para modificar.');
+        showWarningModal.value = true; // <-- deberías tener un modal para advertencias
+        warningMessage.value = "No hay un producto seleccionado.";
         return;
     }
     formEnabled.value = true;
