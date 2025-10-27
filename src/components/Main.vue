@@ -51,8 +51,9 @@
                     <!-- Nombre del Producto -->
                     <div class="form-group">
                         <label>Nombre del Producto <span class="required">*</span></label>
-                        <input type="text" placeholder="Ingrese nombre de producto" v-model="form.nombreProducto"
-                            :disabled="!formEnabled" />
+                        <input type="text" placeholder="Nombre del producto (autogenerado)"
+                            v-model="form.nombreProducto" :disabled="!formEnabled" readonly />
+
                     </div>
 
 
@@ -276,9 +277,17 @@
                             <label>Categoría <span class="required">*</span></label>
                             <div class="input-with-button">
                                 <select v-model="modalForm.categoria">
-                                    <option value="">Ingrese Categoría</option>
-                                    <option value="alimentos">Alimentos</option>
+                                    <option value="" disabled selected>Ingrese Categoría</option>
+                                    <option value="frutas_y_verduras">Frutas y Verduras</option>
+                                    <option value="panaderia_y_pasteleria">Panadería y Pastelería</option>
+                                    <option value="carniceria">Carnicería</option>
+                                    <option value="lacteos_y_derivados">Lácteos y Derivados</option>
+                                    <option value="pescaderia">Pescadería</option>
+                                    <option value="almacen_y_despensa">Almacén y Despensa</option>
                                     <option value="bebidas">Bebidas</option>
+                                    <option value="limpieza_y_hogar">Limpieza y Hogar</option>
+                                    <option value="perfumeria_e_higiene">Perfumería e Higiene Personal</option>
+                                    <option value="mascotas">Mascotas</option>
                                 </select>
                             </div>
                         </div>
@@ -481,6 +490,15 @@ const form = reactive({
     imagenPreview: null,
     imagen: null
 });
+
+watch(
+    () => [form.productoGenerico, form.marca, form.presentacion],
+    ([nuevoProducto, nuevaMarca, nuevaPresentacion]) => {
+        const partes = [nuevoProducto, nuevaMarca, nuevaPresentacion].filter(Boolean);
+        form.nombreProducto = partes.join(' ');
+    }
+);
+
 
 const errors = reactive({
     existencias: '',
