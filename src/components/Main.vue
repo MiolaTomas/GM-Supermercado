@@ -679,14 +679,16 @@ onMounted(() => {
 });
 
 
+// Estas son las cosas que se cargarian por defecto en los dropdown, en este caso prefiero dejarlas vacias
+
 const productos = ref([]);
-const marcas = ref(['Playadito', 'Taragüí', 'Rosamonte']);
-const presentaciones = ref(['Bolsa 500g', 'Bolsa 1kg', 'Caja 12 unidades']);
-const proveedores = ref(['Proveedor 1', 'Proveedor 2', 'Proveedor 3']);
+const marcas = ref([]);
+const presentaciones = ref([]);
+const proveedores = ref([]);
 
 
 /* LISTA de genéricos (ahora reactiva) */
-const productoGenericos = ref(['Yerba', 'Café', 'Té']);
+const productoGenericos = ref([]);
 
 
 /* control y estado */
