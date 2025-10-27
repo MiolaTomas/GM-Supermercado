@@ -1,5 +1,66 @@
-# Vue 3 + Vite
+# 🧾 Proyecto de Gestión de Compras y Control de Stock
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 🧠 Descripción del Proyecto
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+El **Sistema de Gestión de Compras y Control de Stock** es una herramienta administrativa diseñada para optimizar la gestión de compras dentro de una empresa.  
+Su objetivo principal es **automatizar procesos, controlar gastos y mantener registros detallados de las transacciones**, brindando una mayor eficiencia y trazabilidad en la administración del inventario.
+
+El sistema busca convertirse en una solución tecnológica integral que simplifique la toma de decisiones y reduzca los errores humanos asociados a la gestión manual del stock.
+
+---
+
+## 🧩 Alcance del Prototipo
+
+Este repositorio contiene **únicamente el módulo de carga de productos**, correspondiente a la primera etapa del desarrollo.  
+No representa la codificación completa del sistema, sino un **prototipo funcional** que permite:
+
+- Registrar productos en el sistema
+- Gestionar información básica del stock
+- Servir como base para futuras expansiones del proyecto
+
+---
+
+## 🚀 Objetivos del Proyecto
+
+- Implementar un sistema administrativo de compras y control de stock
+- Automatizar procesos de carga y actualización de productos
+- Diseñar una arquitectura modular y escalable
+- Integrar los conocimientos de las distintas asignaturas involucradas
+
+---
+
+## 📚 Asignaturas Involucradas
+
+- **Modelos de Negocios**
+- **Desarrollo de Sistemas**
+- **Gestión de Software I**
+- **Prácticas Profesionalizantes I**
+
+---
+
+## 👥 Integrantes del Equipo
+
+- Melgarejo Valentina
+- Helther Jeremías
+- Delgado Fausto
+- Candotti Matías
+- Vega Jonatan
+- Kloster Joaquín
+- Miola Tomás
+
+---
+
+---
+
+## 🏁 Estado Actual
+
+- **Etapa:** Prototipo (módulo de carga de productos)
+- **Versión:** 1.0.0
+- **Última actualización:** Octubre 2025
+
+---
+
+## 📄 Licencia
+
+Este proyecto se desarrolla con fines **académicos** como parte del trabajo integrador de las asignaturas mencionadas.  
+Todos los derechos corresponden a los autores y a la institución educativa correspondiente.
