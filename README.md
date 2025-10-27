@@ -50,8 +50,6 @@ No representa la codificación completa del sistema, sino un **prototipo funcion
 
 ---
 
----
-
 ## 🏁 Estado Actual
 
 - **Etapa:** Prototipo (módulo de carga de productos)
