@@ -53,7 +53,6 @@
                         <label>Nombre del Producto <span class="required">*</span></label>
                         <input type="text" placeholder="Nombre del producto (autogenerado)"
                             v-model="form.nombreProducto" :disabled="!formEnabled" readonly />
-
                     </div>
 
 
@@ -461,6 +460,19 @@
 
     <!-- Esto es para la notificacion -->
 
+
+
+    <div v-if="showWarningModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-body">
+                <p>{{ warningMessage }}</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" @click="showWarningModal = false">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
 </template>
 
 
@@ -490,6 +502,11 @@ const form = reactive({
     imagenPreview: null,
     imagen: null
 });
+
+const showWarningModal = ref(false);
+const warningMessage = ref('');
+
+
 
 watch(
     () => [form.productoGenerico, form.marca, form.presentacion],
@@ -574,12 +591,15 @@ const triggerToast = (message) => {
 
 const confirmDelete = () => {
     if (!form.id) {
-        alert("No hay un producto seleccionado.");
+        // Mostrar modal de advertencia estilizado
+        showWarningModal.value = true; // <-- deberías tener un modal para advertencias
+        warningMessage.value = "No hay un producto seleccionado.";
         return;
     }
     productToDelete.value = form.id;
     showDeleteModal.value = true;
 };
+
 
 const deleteProduct = () => {
     productos.value = productos.value.filter(p => p.id !== productToDelete.value);
@@ -1012,6 +1032,60 @@ const saveProveedorModal = () => {
 * {
     box-sizing: border-box;
 }
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: #fff;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-icon {
+    font-size: 40px;
+    color: #FFA500;
+    /* naranja como en la imagen */
+}
+
+.modal-body p {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+.modal-footer {
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background: #d9534f;
+    /* rojo */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background: #c9302c;
+}
+
+
 
 .error-message {
     color: red;
