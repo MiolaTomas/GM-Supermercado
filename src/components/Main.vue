@@ -364,16 +364,28 @@
                     </button>
                 </div>
 
-
                 <h2 class="modal-title">Presentación</h2>
-
 
                 <div class="modal-form">
                     <div class="modal-form-row-single">
-                        <div class="form-group">
-                            <label>Nombre <span class="required">*</span></label>
-                            <input type="text" placeholder="Ingrese Nombre" v-model="presentacionForm.nombre" />
+
+                        <div>
+                            <div class="form-group">
+                                <label>Cantidad <span class="required">*</span></label>
+                                <input type="text" placeholder="Ingrese Nombre" v-model="presentacionForm.nombre" />
+                            </div>
+                            <div class="form-group">
+                                <label>Unidad de Medida <span class="required">*</span></label>
+                                <select v-model="presentacionForm.unidadMedida">
+                                    <option value="mg">mg</option>
+                                    <option value="g">g</option>
+                                    <option value="kg">kg</option>
+                                    <option value="ml">mL</option>
+                                    <option value="l">L</option>
+                                </select>
+                            </div>
                         </div>
+                        <!-- 🆕 Dropdown de unidades -->
 
 
                         <div class="form-group">
@@ -383,13 +395,13 @@
                     </div>
                 </div>
 
-
                 <div class="modal-actions">
                     <button class="btn-cancel" @click="closePresentacionModal">Cancelar</button>
                     <button class="btn-submit" @click="savePresentacionModal">Cargar</button>
                 </div>
             </div>
         </div>
+
 
 
         <!-- Modal Proveedor -->
@@ -984,21 +996,35 @@ const openPresentacionModal = () => {
     showPresentacionModal.value = true;
 };
 const closePresentacionModal = () => showPresentacionModal.value = false;
+
 const savePresentacionModal = () => {
-    const name = (presentacionForm.nombre || '').trim();
-    if (!name) {
-        alert('Por favor ingrese un nombre para la presentación.');
+    const cantidad = (presentacionForm.nombre || '').trim();
+    const medida = (presentacionForm.unidadMedida || '').trim();
+
+    if (!cantidad) {
+        alert('Por favor ingrese una cantidad.');
         return;
     }
-    if (!presentaciones.value.includes(name)) {
-        presentaciones.value.push(name);
+
+    if (!medida) {
+        alert('Por favor seleccione una unidad de medida.');
+        return;
+    }
+
+    const nombreCompleto = `${cantidad} ${medida}`; // Combina cantidad + unidad
+
+    if (!presentaciones.value.includes(nombreCompleto)) {
+        presentaciones.value.push(nombreCompleto);
         saveToLocalStorage();
     }
-    form.presentacion = name;
-    presentacionForm.descripcion = '';
+
+    form.presentacion = nombreCompleto;
     presentacionForm.nombre = '';
+    presentacionForm.unidadMedida = '';
     closePresentacionModal();
 };
+
+
 
 
 const openProveedorModal = () => {
@@ -1033,6 +1059,7 @@ const saveProveedorModal = () => {
 * {
     box-sizing: border-box;
 }
+
 
 .modal-overlay {
     position: fixed;
