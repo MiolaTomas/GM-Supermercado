@@ -1,6 +1,5 @@
 <script setup>
 import Sidebar from './components/Sidebar.vue';
-import Navbar from './components/Navbar.vue';
 import Main from './components/Main.vue';
 </script>
 
@@ -11,7 +10,7 @@ import Main from './components/Main.vue';
     </aside>
     <div class="right-section">
       <header class="navbar">
-        <Navbar />
+        <!-- <Navbar /> -->
       </header>
       <main class="main-content">
         <Main />
