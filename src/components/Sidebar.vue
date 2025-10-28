@@ -11,13 +11,14 @@
                     class="menu-item">
                     <i :class="item.icon"></i>
                     <span>{{ item.label }}</span>
+                    <!-- Mostrar chevron solo si tiene subItems -->
                     <i v-if="item.subItems"
-                        :class="isProductsOpen ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-right'"
+                        :class="isStockOpen ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-right'"
                         class="chevron"></i>
                 </div>
 
-                <!-- Dropdown submenu -->
-                <ul v-if="item.subItems && isProductsOpen" class="submenu">
+                <!-- Dropdown submenu para Stock -->
+                <ul v-if="item.subItems && isStockOpen" class="submenu">
                     <li v-for="subItem in item.subItems" :key="subItem.name"
                         :class="{ active: activeItem === subItem.name }" @click.stop="handleSubItemClick(subItem.name)"
                         class="submenu-item">
@@ -34,26 +35,28 @@
 import { ref } from 'vue'
 
 const activeItem = ref('Productos')
-const isProductsOpen = ref(false)
+const isStockOpen = ref(false)
 
 const menuItems = [
+    { name: 'Productos', label: 'Productos', icon: 'fa-solid fa-box' },
     {
-        name: 'Productos',
-        label: 'Productos',
-        icon: 'fa-solid fa-box',
+        name: 'Stock',
+        label: 'Stock',
+        icon: 'fa-solid fa-cubes',
         subItems: [
-            { name: 'Categorías', label: 'Categorías', icon: 'fa-solid fa-tags' },
-            { name: 'Inventario', label: 'Inventario', icon: 'fa-solid fa-clipboard-list' },
-            { name: 'Precios', label: 'Precios', icon: 'fa-solid fa-dollar-sign' }
+            { name: 'Existencias', label: 'Existencias', icon: 'fa-solid fa-list' },
+            { name: 'GestionarDespachos', label: 'Gestionar despachos', icon: 'fa-solid fa-truck' }
         ]
     },
-    { name: 'Stock', label: 'Stock', icon: 'fa-solid fa-cubes' },
     { name: 'Proveedores', label: 'Proveedores', icon: 'fa-solid fa-truck' },
+    { name: 'Compras', label: 'Compras', icon: 'fa-solid fa-cart-shopping' },
+    { name: 'Informe', label: 'Informe', icon: 'fa-solid fa-chart-line' },
 ]
 
+
 function handleItemClick(name) {
-    if (name === 'Productos') {
-        isProductsOpen.value = !isProductsOpen.value
+    if (name === 'Stock') {
+        isStockOpen.value = !isStockOpen.value
     }
     activeItem.value = name
 }
@@ -68,7 +71,6 @@ function handleSubItemClick(name) {
     width: 200px;
     height: 100vh;
     background: var(--sidebar-bg);
-    /* white background */
     color: black;
     transition: transform 0.3s, width 0.3s;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -111,16 +113,13 @@ li {
     transition: background 0.3s, color 0.3s;
 }
 
-/* Default state */
 .menu-item i {
     color: var(--sidebar-base-text);
-    /* icon black */
     font-size: 1.2rem;
 }
 
 .menu-item span {
     color: var(--sidebar-base-text);
-    /* text black */
     font-weight: 500;
 }
 
@@ -129,12 +128,10 @@ li {
     font-size: 0.8rem;
 }
 
-/* Hover */
 .menu-item:hover {
     background-color: rgba(231, 76, 60, 0.1);
 }
 
-/* Active state */
 .menu-item.active {
     background-color: #e74c3c;
 }
@@ -142,10 +139,8 @@ li {
 .menu-item.active i,
 .menu-item.active span {
     color: white;
-    /* both icon and text turn white */
 }
 
-/* Submenu styles */
 .submenu {
     background-color: #f5f5f5;
     padding: 0;
@@ -191,7 +186,6 @@ li {
         width: 80px;
         display: flex;
         flex-direction: column;
-        /* stack logo and menu vertically */
         align-items: center;
     }
 
@@ -206,7 +200,6 @@ li {
 
     .sidebar-logo span.logo-sub {
         display: none;
-        /* hide subtitle */
     }
 
     ul {
@@ -226,12 +219,10 @@ li {
     .menu-item span,
     .menu-item .chevron {
         display: none;
-        /* hide menu text and chevron */
     }
 
     .submenu {
         display: none;
-        /* hide submenu on mobile */
     }
 }
 </style>
