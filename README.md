@@ -1,5 +1,7 @@
 # 🧾 Proyecto de Gestión de Compras y Control de Stock
 
+[🌐 Ver proyecto en vivo](https://gm-supermercado.vercel.app/)
+
 ## 🧠 Descripción del Proyecto
 
 El **Sistema de Gestión de Compras y Control de Stock** es una herramienta administrativa diseñada para optimizar la gestión de compras dentro de una empresa.  
