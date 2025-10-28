@@ -1,23 +1,24 @@
 <template>
     <aside class="sidebar">
+        <!-- Logo -->
         <a href="/" class="sidebar-logo">
             <span class="logo-main">GM</span>
             <span class="logo-sub">Supermercado</span>
         </a>
 
+        <!-- Menú principal -->
         <ul>
             <li v-for="item in menuItems" :key="item.name">
                 <div :class="{ active: activeItem === item.name }" @click="handleItemClick(item.name)"
                     class="menu-item">
                     <i :class="item.icon"></i>
                     <span>{{ item.label }}</span>
-                    <!-- Mostrar chevron solo si tiene subItems -->
                     <i v-if="item.subItems"
                         :class="isStockOpen ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-right'"
                         class="chevron"></i>
                 </div>
 
-                <!-- Dropdown submenu para Stock -->
+                <!-- Submenu para Stock -->
                 <ul v-if="item.subItems && isStockOpen" class="submenu">
                     <li v-for="subItem in item.subItems" :key="subItem.name"
                         :class="{ active: activeItem === subItem.name }" @click.stop="handleSubItemClick(subItem.name)"
@@ -28,6 +29,19 @@
                 </ul>
             </li>
         </ul>
+
+        <!-- Bottom fixed items -->
+        <div class="sidebar-bottom">
+            <div :class="{ active: activeItem === 'Configuracion' }" class="menu-item"
+                @click="activeItem = 'Configuracion'">
+                <i class="fa-solid fa-gear"></i>
+                <span>Configuración</span>
+            </div>
+            <div :class="{ active: activeItem === 'Usuario' }" class="menu-item" @click="activeItem = 'Usuario'">
+                <i class="fa-solid fa-user"></i>
+                <span>Usuario</span>
+            </div>
+        </div>
     </aside>
 </template>
 
@@ -53,7 +67,6 @@ const menuItems = [
     { name: 'Informe', label: 'Informe', icon: 'fa-solid fa-chart-line' },
 ]
 
-
 function handleItemClick(name) {
     if (name === 'Stock') {
         isStockOpen.value = !isStockOpen.value
@@ -70,6 +83,8 @@ function handleSubItemClick(name) {
 .sidebar {
     width: 200px;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
     background: var(--sidebar-bg);
     color: black;
     transition: transform 0.3s, width 0.3s;
@@ -180,49 +195,14 @@ li {
     color: white;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 80px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+.sidebar-bottom {
+    margin-top: auto;
+    /* empuja hacia abajo */
+    display: flex;
+    flex-direction: column;
+}
 
-    .sidebar-logo {
-        padding: 0.5em;
-    }
-
-    .sidebar-logo span.logo-main {
-        font-size: 2em;
-        padding: .5em;
-    }
-
-    .sidebar-logo span.logo-sub {
-        display: none;
-    }
-
-    ul {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        padding: 0;
-        margin: 0;
-    }
-
-    .menu-item {
-        justify-content: center;
-        padding: 12px 0;
-        gap: 0;
-    }
-
-    .menu-item span,
-    .menu-item .chevron {
-        display: none;
-    }
-
-    .submenu {
-        display: none;
-    }
+.sidebar-bottom .menu-item {
+    padding: 12px 20px;
 }
 </style>
